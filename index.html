@@ -7,7 +7,23 @@
     <title>pokedex-app</title>
   </head>
   <body>
-    <div id="app"></div>
+    <header id="app-header">
+      <h1>Pokédex</h1>
+      <input id="search" type="text" placeholder="Search by name or #..." />
+      <button id="btn-random">Random</button>
+      <div id="type-filters"></div>
+    </header>
+    <main>
+      <div id="loading">Loading...</div>
+      <div id="grid"></div>
+    </main>
+    <div id="modal" class="modal-hidden">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <button id="modal-close">Close</button>
+        <div id="modal-body"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
