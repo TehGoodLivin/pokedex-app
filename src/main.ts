@@ -70,6 +70,7 @@ function buildDropdowns() {
     opt.value = type;
     opt.textContent = type === 'all' ? 'All types' : type.charAt(0).toUpperCase() + type.slice(1);
     typeSelect.appendChild(opt);
+    // Should import types from API and minimize hard coded values.
   });
 
   regions.forEach(region => {
@@ -135,6 +136,7 @@ function openModal(html: string, pokemonId: number) {
       if(!audioPlaying) {
         audioPlaying = true;
         audio = new Audio(modalCryBtn.dataset.cry);
+        audio.volume = 0.4; // Lets not make anyone deaf
         audio.play();
 
         audio.addEventListener("ended", () => {
@@ -149,7 +151,8 @@ function openModal(html: string, pokemonId: number) {
     modalDexVoiceBtn.addEventListener("click", () => {
       if(!audioPlaying) {
         audioPlaying = true;
-        audio = new Audio(`/audio/${pokemonId.toString()}.mp3`);
+        audio = new Audio(`audio/${pokemonId.toString()}.mp3`);
+        audio.volume = 0.4; // Lets not make anyone deaf
         audio.play();
         modalDexVoiceBtn.textContent = "▶ Playing...";
 
@@ -160,6 +163,7 @@ function openModal(html: string, pokemonId: number) {
         });
       }
       
+      // For Pause / Resume Options
       // if (audio && !audio.paused) {
       //   audio.pause();
       //   modalDexVoiceBtn.textContent = "▶ Resume Entry";
