@@ -137,7 +137,7 @@ function openModal(html: string, pokemonId: number) {
         audioPlaying = true;
         audio = new Audio(modalCryBtn.dataset.cry);
         audio.volume = 0.4; // Lets not make anyone deaf
-        audio.play();
+        audio.play().then(() => console.log("Cry Audio playing")).catch(e => console.error("Playback failed:", e));
 
         audio.addEventListener("ended", () => {
           audioPlaying = false;
@@ -153,7 +153,7 @@ function openModal(html: string, pokemonId: number) {
         audioPlaying = true;
         audio = new Audio(`audio/${pokemonId.toString()}.mp3`);
         audio.volume = 0.4; // Lets not make anyone deaf
-        audio.play();
+        audio.play().then(() => console.log("Dex Audio playing")).catch(e => console.error("Playback failed:", e));
         modalDexVoiceBtn.textContent = "▶ Playing...";
 
         audio.addEventListener("ended", () => {
