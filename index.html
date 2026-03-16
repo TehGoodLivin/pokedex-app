@@ -2,28 +2,70 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    
+    <link rel="stylesheet" href="/src/style.css" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pokedex-app</title>
+
+    <title>Retro Pokédex</title>
   </head>
+
   <body>
-    <header id="app-header">
-      <h1>Pokédex</h1>
-      <input id="search" type="text" placeholder="Search by name or #..." />
-      <button id="btn-random">Random</button>
-      <div id="type-filters"></div>
-    </header>
-    <main>
-      <div id="loading">Loading...</div>
-      <div id="grid"></div>
-    </main>
-    <div id="modal" class="modal-hidden">
+    <div id="app-shell">
+      <header id="app-header">
+        <div class="header-top">
+          <div class="pokedex-lens"></div>
+          <div class="pokedex-dots">
+            <div class="pokedex-dot red"></div>
+            <div class="pokedex-dot yellow"></div>
+            <div class="pokedex-dot green"></div>
+          </div>
+          <span class="header-title">Retro Pokédex (Dexter)</span>
+        </div>
+
+        <div class="header-controls">
+          <input id="search" type="text" placeholder="Search by pokemon name or number" />
+          <select id="select-type"></select>
+          <select id="select-region"></select>
+          <button id="btn-favorites">Favorites</button>
+          <button id="btn-random">Random</button>
+        </div>
+      </header>
+
+      <nav id="app-nav">
+        <button id="nav-dex" class="nav-btn active">Pokédex</button>
+        <button id="nav-quiz" class="nav-btn">Quiz</button>
+      </nav>
+
+      <div id="content-area">
+        <main>
+          <div id="loading">Loading...</div>
+          <div id="grid"></div>
+        </main>
+        <div id="quiz-view" class="hidden"></div>
+      </div>
+    </div>
+
+    <div id="modal">
       <div class="modal-backdrop"></div>
       <div class="modal-content">
-        <button id="modal-close">Close</button>
+        <div class="modal-top">
+          <div class="modal-lens"></div>
+          <div class="modal-dots">
+            <div class="modal-dot red"></div>
+            <div class="modal-dot yellow"></div>
+            <div class="modal-dot green"></div>
+          </div>
+          <button id="modal-fav"></button>
+          <button id="modal-close">Close</button>
+        </div>
         <div id="modal-body"></div>
       </div>
     </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
