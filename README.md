@@ -1,4 +1,4 @@
-# Pokemon Pokedex App (Dexter)
+# Retro Pokemon Pokedex App (Dexter)
 A Pokemon encyclopedia web app that lets you browse, search, and filter all 1,025 Pokemon. Includes a "Who's That Pokemon?" quiz game with score tracking.
 
 Built with vanilla TypeScript and Vite — no frameworks.
