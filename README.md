@@ -79,40 +79,19 @@ All data is fetched from [PokeAPI](https://pokeapi.co/):
 ### Problem Statement
 A web app for Pokémon fans to browse, search, and learn about Pokémon using data from the PokéAPI.
 
-#### Title -> Description -> Column
-1	Browse Pokémon grid	
-        As a user, I want to browse a grid of all Pokémon, so that I can explore the full Pokédex.	
-            Completed
-2	Search by name or number
-        As a user, I want to search Pokémon by name or number, so that I can quickly find a specific one.
-            Completed
-3	Filter by type
-        As a user, I want to filter Pokémon by type, so that I can see only matching Pokémon.
-            Completed
-4	Filter by region
-        As a user, I want to filter by region, so that I can focus on a specific generation.
-            Completed
-5	View Pokémon details
-        As a user, I want to click a Pokémon and see its stats, abilities, and sprite, so that I can learn more about it.
-            Completed
-6	Favorite Pokémon
-        As a user, I want to favorite Pokémon, so that I can save the ones I like and view them later.
-            Completed
-7	Random Pokémon
-        As a user, I want to click a random button, so that I can discover new Pokémon.
-            Completed
-8	Hear Pokémon cry
-        As a user, I want to hear a Pokémon's cry, so that I can recognize its sound.
-            Completed
-9	Pokédex voice entry
-        As a user, I want to listen to a voice entry, so that I get the classic Pokédex experience.
-            Completed
-10	Who's That Pokémon quiz
-        As a user, I want to take a quiz, so that I can test my knowledge.
-            Completed
-11	Dark mode
-        As a user, I want to toggle dark mode, so that I can use the app comfortably at night.
-            Icebox
-12	Evolution chain
-        As a user, I want to see a Pokémon's evolution chain, so that I know how it evolves.
-            Icebox
+#### Feature List
+
+| #  | Feature                   | User Story                                                                                                   | Status     |
+|----|---------------------------|---------------------------------------------------------------------------------------------------------------|------------|
+| 1  | Browse Pokémon grid       | As a user, I want to browse a grid of all Pokémon, so that I can explore the full Pokédex.                   | Completed  |
+| 2  | Search by name or number  | As a user, I want to search Pokémon by name or number, so that I can quickly find a specific one.            | Completed  |
+| 3  | Filter by type            | As a user, I want to filter Pokémon by type, so that I can see only matching Pokémon.                        | Completed  |
+| 4  | Filter by region          | As a user, I want to filter by region, so that I can focus on a specific generation.                         | Completed  |
+| 5  | View Pokémon details      | As a user, I want to click a Pokémon and see its stats, abilities, and sprite, so that I can learn more.     | Completed  |
+| 6  | Favorite Pokémon          | As a user, I want to favorite Pokémon, so that I can save the ones I like and view them later.               | Completed  |
+| 7  | Random Pokémon            | As a user, I want to click a random button, so that I can discover new Pokémon.                              | Completed  |
+| 8  | Hear Pokémon cry          | As a user, I want to hear a Pokémon's cry, so that I can recognize its sound.                                | Completed  |
+| 9  | Pokédex voice entry       | As a user, I want to listen to a voice entry, so that I get the classic Pokédex experience.                  | Completed  |
+| 10 | Who's That Pokémon quiz   | As a user, I want to take a quiz, so that I can test my knowledge.                                           | Completed  |
+| 11 | Dark mode                 | As a user, I want to toggle dark mode, so that I can use the app comfortably at night.                       | Icebox     |
+| 12 | Evolution chain           | As a user, I want to see a Pokémon's evolution chain, so that I know how it evolves.                         | Icebox     |
