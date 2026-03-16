@@ -651,7 +651,8 @@ main {
 .voice-entry-btn {
   background-color: rgba(240, 240, 240, 1); 
   border: none; 
-  border-radius: 20px; 
+  border-radius: 20px;
+  cursor: pointer;
   font-size: 13px; 
   padding: 6px 14px;
   width: 150px;
