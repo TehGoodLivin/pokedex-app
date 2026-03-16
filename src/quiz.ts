@@ -205,7 +205,7 @@ async function nextRound() {
 
     await preloadImage(spriteUrl);
 
-    img.style.visibility = 'hidden'
+    img.style.visibility = 'hidden'; // Helps prevent image from flashing on screen
     img.style.filter = 'brightness(0)';
     img.src = spriteUrl;
 
@@ -214,7 +214,7 @@ async function nextRound() {
       else img.onload = () => resolve();
     });
     
-    img.style.visibility = 'visible'
+    img.style.visibility = 'visible'; // Helps prevent image from flashing on screen
 
     choices.innerHTML = '';
 

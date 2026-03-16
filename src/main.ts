@@ -182,7 +182,7 @@ function openModal(html: string, pokemonId: number) {
     });
   }
 
-  backdrop.addEventListener("click", () => {
+  backdrop.addEventListener("click", () => { // Used to kill audio
     if(audio) {
       audioPlaying = false;
       audio.pause();
@@ -190,7 +190,7 @@ function openModal(html: string, pokemonId: number) {
     }
   });
 
-  modalClose.addEventListener('click', () => {
+  modalClose.addEventListener('click', () => {  // Used to kill audio
     if(audio) {
       audioPlaying = false;
       audio.pause();
@@ -319,4 +319,4 @@ async function init() {
   }
 }
 
-init();
+init();// Initiate App
