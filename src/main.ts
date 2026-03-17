@@ -1,6 +1,6 @@
 import { createPokemonCard, renderModal } from './render';
 import { initQuiz } from './quiz';
-import { regions, types, totalPokemon, fetchPokemonList, fetchPokemonDetail, fetchPokemonById, fetchPokemonByType } from './utilities';
+import { regions, types, totalPokemon, fetchPokemonList, fetchPokemonDetail, fetchPokemonById, fetchPokemonByType, fetchPokemonSpeciesList, fetchGenderData } from './utilities';
 
 document.addEventListener("DOMContentLoaded", (event: Event) => {
   const favorites = new Set<number>( JSON.parse(localStorage.getItem('poke-favorites') || '[]') ); // Storage
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
   const typeSelect = document.querySelector('#select-type')! as HTMLSelectElement;
   const regionSelect = document.querySelector('#select-region')! as HTMLSelectElement;
 
-  let masterList: { name: string; url: string }[] = [];
+  let masterList: { name: string; url: string; species: { name: string }; gender: 'male' | 'female' | 'both' | 'genderless' }[] = [];
   let activeType = 'all';
   let activeRegion = 'All regions';
   let searchQuery = '';
@@ -304,8 +304,28 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
   async function init() {
     try {
       loading.style.display = 'block';
-      masterList = await fetchPokemonList();
+
+      const [ pokemonList, speciesList, genderData ] = await Promise.all([
+        fetchPokemonList(),
+        fetchPokemonSpeciesList(),
+        fetchGenderData()
+      ]);
+
+      masterList = pokemonList.map((p, i) => {
+        const speciesName = speciesList[i]?.name ?? p.name;
+        let gender: 'male' | 'female' | 'both' | 'genderless';
+
+        if (genderData.genderless.has(speciesName)) gender = 'genderless';
+        else if (genderData.femaleOnly.has(speciesName)) gender = 'female';
+        else if (genderData.maleOnly.has(speciesName)) gender = 'male';
+        else if (genderData.both.has(speciesName)) gender = 'both';
+        else gender = 'genderless';
+
+        return { ...p, species: { name: speciesName }, gender };
+      });
+
       loading.style.display = 'none';
+
       buildDropdowns();
       renderGrid(masterList);
     } catch (e) {

@@ -19,15 +19,6 @@ export const regions: { label: string; min: number; max: number }[] = [
   { label: 'Paldea', min: 906, max: totalPokemon },
 ];
 
-export function parseGenderName(name: string): { display: string; gender: 'male' | 'female' | null } {
-  const lower = name.toLowerCase();
-  if(lower.endsWith('-female')) return { display: name.slice(0, -7), gender: 'female' };
-  if(lower.endsWith('-male')) return { display: name.slice(0, -5), gender: 'male' };
-  if(lower.endsWith('-f')) return { display: name.slice(0, -2), gender: 'female' };
-  if(lower.endsWith('-m')) return { display: name.slice(0, -2), gender: 'male' };
-  return { display: name, gender: null };
-}
-
 export function getRegion(id: number): string {
   for (const r of regions) {
     if(r.label !== 'All regions' && id >= r.min && id <= r.max) return r.label;
@@ -59,4 +50,40 @@ export async function fetchPokemonByType(type: string): Promise<string[]> {
   if(!res.ok) throw new Error(`Failed to fetch type: ${type}`);
   const data = await res.json();
   return data.pokemon.map((p: { pokemon: { name: string } }) => p.pokemon.name);
+}
+
+export async function fetchPokemonSpeciesList(): Promise<{ name: string }[]> {
+  const res = await fetch(`${api}/pokemon-species?limit=${totalPokemon}`);
+  if (!res.ok) throw new Error(`Failed to fetch species list: ${res.status}`);
+  const data = await res.json();
+  return data.results;
+}
+
+export async function fetchGenderData(): Promise<{ femaleOnly: Set<string>; maleOnly: Set<string>; both: Set<string>; genderless: Set<string>; }> {
+  const [femaleRes, maleRes, genderlessRes] = await Promise.all([ fetch(`${api}/gender/1`), fetch(`${api}/gender/2`), fetch(`${api}/gender/3`) ]);
+  if (!femaleRes.ok || !maleRes.ok || !genderlessRes.ok) throw new Error('Failed to fetch gender data');
+  const [femaleData, maleData, genderlessData] = await Promise.all([
+    femaleRes.json(), maleRes.json(), genderlessRes.json()
+  ]);
+
+  const femaleOnly = new Set<string>();
+  const both = new Set<string>();
+  const maleOnly = new Set<string>();
+
+  for (const d of femaleData.pokemon_species_details) {
+    if (d.rate === 8) femaleOnly.add(d.pokemon_species.name);
+    else both.add(d.pokemon_species.name);
+  }
+
+  for (const d of maleData.pokemon_species_details) {
+    if (d.rate === 0) maleOnly.add(d.pokemon_species.name);
+  }
+
+  const genderless = new Set<string>(
+    genderlessData.pokemon_species_details.map(
+      (d: { pokemon_species: { name: string } }) => d.pokemon_species.name
+    )
+  );
+
+  return { femaleOnly, maleOnly, both, genderless };
 }

@@ -1,5 +1,5 @@
 import type { PokemonDetail } from './types';
-import { regions, totalPokemon, fetchPokemonById, parseGenderName } from './utilities';
+import { regions, totalPokemon, fetchPokemonById } from './utilities';
 
 const STORAGE_KEY_SCORE = 'poke-quiz-score';
 const STORAGE_KEY_HIGH_SCORE = 'poke-quiz-highscore';
@@ -89,8 +89,7 @@ function getSpriteUrl(pokemon: PokemonDetail): string {
 }
 
 function buildChoiceLabel(pokemon: PokemonDetail): string {
-  const { display } = parseGenderName(pokemon.name);
-  return display;
+  return pokemon.species.name;
 }
 
 function preloadImage(src: string): Promise<void> {

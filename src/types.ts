@@ -1,3 +1,8 @@
+export interface PokemonListResponse {
+  count: number;
+  results: PokemonListItem[];
+}
+
 export interface PokemonListItem {
   name: string;
   url: string;
@@ -52,6 +57,9 @@ export interface PokemonDetail {
   abilities: Ability[];
   cries: {
     latest: string;
+  };
+  species: {
+    name: string;
   }
 }
 
@@ -63,9 +71,4 @@ export interface FlavorTextEntry {
 
 export interface PokemonSpecies {
   flavor_text_entries: FlavorTextEntry[];
-}
-
-export interface PokemonListResponse {
-  count: number;
-  results: PokemonListItem[];
 }

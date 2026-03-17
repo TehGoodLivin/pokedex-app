@@ -1,7 +1,7 @@
 import type { PokemonDetail } from './types';
-import { getRegion, parseGenderName, sprites } from './utilities';
+import { getRegion, sprites } from './utilities';
 
-export function createPokemonCard( pokemon: { name: string; url: string }, index: number ): HTMLElement {
+export function createPokemonCard( pokemon: { name: string; url: string; species: { name: string }; gender: 'male' | 'female' | 'both' | 'genderless' }, index: number ): HTMLElement {
   const id = index + 1;
   const card = document.createElement('div');
   card.className = 'poke-card';
@@ -9,13 +9,17 @@ export function createPokemonCard( pokemon: { name: string; url: string }, index
   card.dataset.url = pokemon.url;
 
   const sprite = `${sprites}/${id}.png`;
-  const { display, gender } = parseGenderName(pokemon.name);
-  const genderIcon = gender === 'female' ? ' <span class="gender-icon female" title="Female">♀</span>' : gender === 'male' ? ' <span class="gender-icon male" title="Male">♂</span>' : '';
+
+  const genderIcon = pokemon.gender === 'both'
+    ? ' <span class="gender-icon male">♂</span><span class="gender-icon female">♀</span>'
+    : pokemon.gender === 'male' ? ' <span class="gender-icon male">♂</span>'
+    : pokemon.gender === 'female' ? ' <span class="gender-icon female">♀</span>'
+    : '';
 
   card.innerHTML = `
-    <img src="${sprite}" alt="${pokemon.name}" loading="lazy" />
+    <img src="${sprite}" alt="${pokemon.species.name}" loading="lazy" />
     <p class="card-num">#${String(id).padStart(3, '0')}</p>
-    <p class="card-name">${display}${genderIcon}</p>
+    <p class="card-name">${pokemon.species.name}${genderIcon}</p>
     <p class="card-region">${getRegion(id)}</p>
   `;
 
@@ -39,19 +43,17 @@ export function renderModal(p: PokemonDetail): string {
     `)
     .join('');
 
+  const genderIcons = p.sprites.front_female ? ' <span class="gender-icon male">♂</span><span class="gender-icon female">♀</span>' : '';
+
+
   const abilities = p.abilities
     .map(a => `<span class="ability-badge">${a.ability.name}</span>`)
     .join('');
 
-  const hasFemale = !!p.sprites.front_female;
-  const { display: displayName, gender } = parseGenderName(p.name);
-  const nameGender = gender === 'female' ? ' <span class="gender-icon female" title="Female">♀</span>' : gender === 'male' ? ' <span class="gender-icon male" title="Male">♂</span>' : '';
-  const genderIcons = nameGender || (hasFemale ? ' <span class="gender-icon male" title="Male">♂</span><span class="gender-icon female" title="Female">♀</span>' : '');
-
   return `
     <div class="modal-header-row">
       <div>
-        <h2>#${String(p.id).padStart(3, '0')} ${displayName}${genderIcons}</h2>
+        <h2>#${String(p.id).padStart(3, '0')} ${p.species.name}${genderIcons}</h2>
         <p class="modal-region">${getRegion(p.id)}</p>
         <div class="types">${types}</div>
       </div>
@@ -62,6 +64,6 @@ export function renderModal(p: PokemonDetail): string {
     <img class="modal-artwork" src="${sprite}" alt="${p.name}" />
     <div class="stats">${stats}</div>
     <div class="abilities"><h3>Abilities</h3>${abilities}</div>
-    <div class="voice-entry"><h3>Pokédex Voice</h3><button class="voice-entry-btn" data-id="${p.id}" data-name="${displayName}">▶ Play Entry</button></div>
+    <div class="voice-entry"><h3>Pokédex Voice</h3><button class="voice-entry-btn" data-id="${p.id}" data-name="${p.species.name}">▶ Play Entry</button></div>
   `;
 }
