@@ -312,7 +312,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
       ]);
 
       masterList = pokemonList.map((p, i) => {
-        const speciesName = (speciesList[i]?.name ?? p.name).replace(/-[mf]$/, '');
+        let speciesName = speciesList[i]?.name ?? p.name;
         let gender: 'male' | 'female' | 'both' | 'genderless';
 
         if (genderData.genderless.has(speciesName)) gender = 'genderless';
@@ -320,6 +320,8 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
         else if (genderData.maleOnly.has(speciesName)) gender = 'male';
         else if (genderData.both.has(speciesName)) gender = 'both';
         else gender = 'genderless';
+
+        speciesName = (speciesList[i]?.name ?? p.name).replace(/-[mf]$/, '');
 
         return { ...p, species: { name: speciesName }, gender };
       });

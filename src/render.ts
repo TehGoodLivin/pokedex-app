@@ -16,10 +16,12 @@ export function createPokemonCard( pokemon: { name: string; url: string; species
     : pokemon.gender === 'female' ? ' <span class="card-gender-icon female">♀</span>'
     : '';
 
+    console.log(pokemon.species.name);
+
   card.innerHTML = `
     <img src="${sprite}" alt="${pokemon.species.name}" loading="lazy" />
     <p class="card-num">#${String(id).padStart(3, '0')}</p>
-    <p class="card-name">${pokemon.species.name}${genderIcon}</p>
+    <p class="card-name">${pokemon.species.name} ${genderIcon}</p>
     <p class="card-region">${getRegion(id)}</p>
   `;
 
@@ -56,7 +58,7 @@ export function renderModal(p: PokemonDetail, gender: 'male' | 'female' | 'both'
   return `
     <div class="modal-header-row">
       <div>
-        <h2>#${String(p.id).padStart(3, '0')} ${p.species.name}${genderIcons}</h2>
+        <h2>#${String(p.id).padStart(3, '0')} ${p.species.name.replace(/-[mf]$/, '')} ${genderIcons}</h2>
         <p class="modal-region">${getRegion(p.id)}</p>
         <div class="types">${types}</div>
       </div>

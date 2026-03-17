@@ -89,7 +89,7 @@ function getSpriteUrl(pokemon: PokemonDetail): string {
 }
 
 function buildChoiceLabel(pokemon: PokemonDetail): string {
-  return pokemon.species.name;
+  return pokemon.species.name.replace(/-[mf]$/, '');
 }
 
 function preloadImage(src: string): Promise<void> {
@@ -250,7 +250,7 @@ function handleAnswer(btn: HTMLButtonElement) {
   choices.querySelectorAll('.quiz-choice').forEach(b => {
     const button = b as HTMLButtonElement;
 
-    if(button.dataset.name === correctLabel) {
+    if(button.dataset.name === correctLabel.replace(/-[mf]$/, '')) {
       button.classList.add('correct');
     } else if(button === btn && !correct) {
       button.classList.add('wrong');
