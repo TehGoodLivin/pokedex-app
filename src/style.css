@@ -440,7 +440,7 @@ main {
   display: flex;
 }
 
-.modal-backdrop {
+#modal-backdrop {
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.75);

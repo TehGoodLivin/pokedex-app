@@ -10,8 +10,6 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
   const modal = document.querySelector('#modal')! as HTMLElement;
   const modalBody = document.querySelector('#modal-body')! as HTMLElement;
   const modalFav = document.querySelector('#modal-fav')! as HTMLButtonElement;
-  const modalClose = document.querySelector('#modal-close')! as HTMLElement;
-  const backdrop = document.querySelector('.modal-backdrop')! as HTMLElement;
   const searchInput = document.querySelector('#search')! as HTMLInputElement;
   const btnRandom = document.querySelector('#btn-random')! as HTMLElement;
   const btnFavorites = document.querySelector('#btn-favorites')! as HTMLElement;
@@ -27,6 +25,9 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
   let activeRegion = 'All regions';
   let searchQuery = '';
   let showFavoritesOnly = false;
+
+  let audioPlaying: boolean = false;
+  let audio: HTMLAudioElement | null;
 
   function saveFavorites() {
     localStorage.setItem('poke-favorites', JSON.stringify([...favorites]));
@@ -126,9 +127,6 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
     modalBody.innerHTML = html;
     modal.classList.add('open');
 
-    let audioPlaying: boolean = false;
-    let audio: HTMLAudioElement | null;
-
     const modalCryBtn = modalBody.querySelector('.modal-cry-btn') as HTMLButtonElement;
     const modalDexVoiceBtn = modalBody.querySelector('.voice-entry-btn') as HTMLButtonElement;
 
@@ -144,7 +142,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
           audioPlaying = true;
           audio = new Audio(modalCryBtn.dataset.cry);
           audio.volume = 0.4; // Lets not make anyone deaf
-          audio.play().then(() => console.log("Cry Audio playing")).catch(e => console.error("Playback failed:", e));
+          audio.play().then(() => console.log(`Cry Audio playing: ${modalCryBtn.dataset.cry}`)).catch(e => console.error("Playback failed:", e));
 
           audio.addEventListener("ended", () => {
             audioPlaying = false;
@@ -160,7 +158,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
           audioPlaying = true;
           audio = new Audio(`audio/${pokemonId.toString()}.mp3`);
           audio.volume = 0.4; // Lets not make anyone deaf
-          audio.play().then(() => console.log("Dex Audio playing")).catch(e => console.error("Playback failed:", e));
+          audio.play().then(() => console.log(`Dex Audio playing: ${window.location.origin}/audio/${pokemonId.toString()}.mp3`)).catch(e => console.error("Playback failed:", e));
           modalDexVoiceBtn.textContent = "▶ Playing...";
 
           audio.addEventListener("ended", () => {
@@ -188,32 +186,20 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
         // modalDexVoiceBtn.textContent = "⏸ Pause Entry";
       });
     }
+  }
 
-    backdrop.addEventListener("click", () => { // Used to kill audio
-      if(audio) {
+  document.querySelectorAll('.close-modal').forEach(b => { // Used for modal close actions and stopping the audio
+    b.addEventListener('click', () => {
+      if(audio) { 
         audioPlaying = false;
         audio.pause();
         audio = null;
       }
+
+      modal.classList.remove('open');
+      modalBody.innerHTML = '';
     });
-
-    modalClose.addEventListener('click', () => {  // Used to kill audio
-      if(audio) {
-        audioPlaying = false;
-        audio.pause();
-        audio = null;
-      }
-    });
-  }
-
-  function closeModal() {
-    modal.classList.remove('open');
-    modalBody.innerHTML = '';
-  }
-
-  modalClose.addEventListener('click', closeModal);
-
-  backdrop.addEventListener('click', closeModal);
+  });
 
   grid.addEventListener('click', async (e) => {
     const card = (e.target as HTMLElement).closest('.poke-card') as HTMLElement;
