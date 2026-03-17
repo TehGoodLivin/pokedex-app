@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
   const quizView = document.querySelector('#quiz-view')! as HTMLElement;
   const typeSelect = document.querySelector('#select-type')! as HTMLSelectElement;
   const regionSelect = document.querySelector('#select-region')! as HTMLSelectElement;
+  const headerControls = document.querySelector('.header-controls')! as HTMLElement;
 
   let masterList: { name: string; url: string; species: { name: string }; gender: 'male' | 'female' | 'both' | 'genderless' }[] = [];
   let activeType = 'all';
@@ -290,6 +291,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
     quizView.classList.add('hidden');
     navDex.classList.add('active');
     navQuiz.classList.remove('active');
+    headerControls.classList.remove('hidden');
   });
 
   navQuiz.addEventListener('click', () => {
@@ -297,6 +299,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
     quizView.classList.remove('hidden');
     navQuiz.classList.add('active');
     navDex.classList.remove('active');
+    headerControls.classList.add('hidden');
 
     initQuiz();
   });
@@ -321,7 +324,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
         else if (genderData.both.has(speciesName)) gender = 'both';
         else gender = 'genderless';
 
-        speciesName = (speciesList[i]?.name ?? p.name).replace(/-[mf]$/, '');
+        speciesName = (speciesList[i]?.name ?? p.name).replace(/-[mf]$/, ''); // fix -m/f names and doesnt interfere with species name
 
         return { ...p, species: { name: speciesName }, gender };
       });
@@ -329,6 +332,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
       loading.style.display = 'none';
 
       buildDropdowns();
+
       renderGrid(masterList);
     } catch (e) {
       loading.textContent = 'Failed to load Pokémon. Please refresh.';
