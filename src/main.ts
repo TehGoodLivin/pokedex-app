@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
           audioPlaying = true;
           audio = new Audio(`audio/${pokemonId.toString()}.mp3`);
           audio.volume = 0.4; // Lets not make anyone deaf
-          audio.play().then(() => console.log(`Dex Audio playing: ${window.location.origin + window.location.pathname}/audio/${pokemonId.toString()}.mp3`)).catch(e => console.error("Playback failed:", e));
+          audio.play().then(() => console.log(`Dex Audio playing: ${window.location.origin + window.location.pathname}audio/${pokemonId.toString()}.mp3`)).catch(e => console.error("Playback failed:", e));
           modalDexVoiceBtn.textContent = "▶ Playing...";
 
           audio.addEventListener("ended", () => {
