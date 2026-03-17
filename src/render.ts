@@ -11,9 +11,9 @@ export function createPokemonCard( pokemon: { name: string; url: string; species
   const sprite = `${sprites}/${id}.png`;
 
   const genderIcon = pokemon.gender === 'both'
-    ? ' <span class="gender-icon male">♂</span><span class="gender-icon female">♀</span>'
-    : pokemon.gender === 'male' ? ' <span class="gender-icon male">♂</span>'
-    : pokemon.gender === 'female' ? ' <span class="gender-icon female">♀</span>'
+    ? ' <span class="card-gender-icon male">♂</span><span class="card-gender-icon female">♀</span>'
+    : pokemon.gender === 'male' ? ' <span class="card-gender-icon male">♂</span>'
+    : pokemon.gender === 'female' ? ' <span class="card-gender-icon female">♀</span>'
     : '';
 
   card.innerHTML = `
@@ -26,7 +26,7 @@ export function createPokemonCard( pokemon: { name: string; url: string; species
   return card;
 }
 
-export function renderModal(p: PokemonDetail): string {
+export function renderModal(p: PokemonDetail, gender: 'male' | 'female' | 'both' | 'genderless'): string {
   const sprite = p.sprites.front_default;
 
   const types = p.types.map(t => `<span class="type-badge type-${t.type.name}">${t.type.name}</span>`).join('');
@@ -43,8 +43,11 @@ export function renderModal(p: PokemonDetail): string {
     `)
     .join('');
 
-  const genderIcons = p.sprites.front_female ? ' <span class="gender-icon male">♂</span><span class="gender-icon female">♀</span>' : '';
-
+  const genderIcons = gender === 'both'
+    ? ' <span class="modal-gender-icon male">♂</span><span class="modal-gender-icon female">♀</span>'
+    : gender === 'male' ? ' <span class="modal-gender-icon male">♂</span>'
+    : gender === 'female' ? ' <span class="modal-gender-icon female">♀</span>'
+    : '';
 
   const abilities = p.abilities
     .map(a => `<span class="ability-badge">${a.ability.name}</span>`)

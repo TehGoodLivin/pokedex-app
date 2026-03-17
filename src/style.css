@@ -610,17 +610,23 @@ main {
   text-align: right;
 }
 
-.gender-icon {
+.card-gender-icon {
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+.modal-gender-icon {
   font-size: 16px;
   font-weight: 700;
   margin-left: 2px;
 }
 
-.gender-icon.male {
+.card-gender-icon.male, .modal-gender-icon.male {
   color: rgba(104, 144, 240, 1);
 }
 
-.gender-icon.female {
+.card-gender-icon.female, .modal-gender-icon {
   color: rgba(248, 88, 136, 1);
 }
 

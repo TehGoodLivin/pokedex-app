@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
     openModal('<p style="text-align:center;padding:40px;color:#aaa">Loading...</p>', 0);
     try {
       const detail = await fetchPokemonDetail(card.dataset.url!);
-      openModal(renderModal(detail), detail.id);
+      openModal(renderModal(detail, masterList[detail.id - 1]?.gender ?? 'genderless'), detail.id);
     } catch (e) {
       openModal('<p style="text-align:center;padding:40px;color:#CC0000">Failed to load. Try again.</p>', 0);
     }
@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
     const regionFiltered = getRegionFiltered();
     const searched = regionFiltered.filter(p => {
       const id = String(masterList.indexOf(p) + 1);
-      return p.name.includes(searchQuery) || id.includes(searchQuery);
+      return p.species.name.includes(searchQuery) || id.includes(searchQuery);
     });
     renderGrid(searched);
   });
@@ -273,7 +273,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
 
     try {
       const detail = await fetchPokemonById(id);
-      openModal(renderModal(detail), detail.id);
+      openModal(renderModal(detail, masterList[detail.id - 1]?.gender ?? 'genderless'), detail.id);
     } catch (e) {
       openModal('<p style="text-align:center;padding:40px;color:#CC0000">Failed to load. Try again.</p>', 0);
     }
@@ -312,7 +312,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
       ]);
 
       masterList = pokemonList.map((p, i) => {
-        const speciesName = speciesList[i]?.name ?? p.name;
+        const speciesName = (speciesList[i]?.name ?? p.name).replace(/-[mf]$/, '');
         let gender: 'male' | 'female' | 'both' | 'genderless';
 
         if (genderData.genderless.has(speciesName)) gender = 'genderless';
