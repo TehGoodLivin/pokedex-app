@@ -27,41 +27,61 @@ export function getRegion(id: number): string {
 }
 
 export async function fetchPokemonList(): Promise<PokemonListItem[]> {
-  const res = await fetch(`${api}/pokemon?limit=${totalPokemon}`);
-  if(!res.ok) throw new Error(`Failed to fetch pokemon list: ${res.status}`);
-  const data: PokemonListResponse = await res.json();
+  const url = `${api}/pokemon?limit=${totalPokemon}`;
+  const response = await fetch(url);
+
+  if(!response.ok) throw new Error(`Failed to fetch pokemon list: ${response.status}`);
+
+  const data: PokemonListResponse = await response.json();
   return data.results;
 }
 
-export async function fetchPokemonDetail(url: string): Promise<PokemonDetail> {
-  const res = await fetch(url);
-  if(!res.ok) throw new Error(`Failed to fetch pokemon detail: ${res.status}`);
-  return res.json();
+export async function fetchPokemonById(id: number): Promise<PokemonDetail> {
+  const url = `${api}/pokemon/${id}`;
+  const response = await fetch(url);
+
+  if(!response.ok) throw new Error(`No pokemon found with id: ${id}`);
+
+  return response.json();
 }
 
-export async function fetchPokemonById(id: number): Promise<PokemonDetail> {
-  const res = await fetch(`${api}/pokemon/${id}`);
-  if(!res.ok) throw new Error(`No pokemon found with id: ${id}`);
-  return res.json();
+export async function fetchPokemonDetail(url: string): Promise<PokemonDetail> {
+  const response = await fetch(url);
+
+  if(!response.ok) throw new Error(`Failed to fetch pokemon detail: ${response.status}`);
+
+  return response.json();
 }
 
 export async function fetchPokemonByType(type: string): Promise<string[]> {
-  const res = await fetch(`${api}/type/${type}`);
-  if(!res.ok) throw new Error(`Failed to fetch type: ${type}`);
-  const data = await res.json();
+  const url = `${api}/type/${type}`;
+  const response = await fetch(url);
+
+  if(!response.ok) throw new Error(`Failed to fetch type: ${type}`);
+
+  const data = await response.json();
   return data.pokemon.map((p: { pokemon: { name: string } }) => p.pokemon.name);
 }
 
 export async function fetchPokemonSpeciesList(): Promise<{ name: string }[]> {
-  const res = await fetch(`${api}/pokemon-species?limit=${totalPokemon}`);
-  if (!res.ok) throw new Error(`Failed to fetch species list: ${res.status}`);
-  const data = await res.json();
+  const url = `${api}/pokemon-species?limit=${totalPokemon}`;
+  const response = await fetch(url);
+
+  if (!response.ok) throw new Error(`Failed to fetch species list: ${response.status}`);
+
+  const data = await response.json();
   return data.results;
 }
 
 export async function fetchGenderData(): Promise<{ femaleOnly: Set<string>; maleOnly: Set<string>; both: Set<string>; genderless: Set<string>; }> {
-  const [femaleRes, maleRes, genderlessRes] = await Promise.all([ fetch(`${api}/gender/1`), fetch(`${api}/gender/2`), fetch(`${api}/gender/3`) ]);
+  const femaleUrl = `${api}/gender/1`;
+  const maleUrl = `${api}/gender/2`;
+  const genderlessUrl = `${api}/gender/3`;
+
+  const [femaleRes, maleRes, genderlessRes] = await Promise.all([ fetch(femaleUrl), fetch(maleUrl), fetch(genderlessUrl) ]);
+
   if (!femaleRes.ok || !maleRes.ok || !genderlessRes.ok) throw new Error('Failed to fetch gender data');
+
   const [femaleData, maleData, genderlessData] = await Promise.all([
     femaleRes.json(), maleRes.json(), genderlessRes.json()
   ]);
