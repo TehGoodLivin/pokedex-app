@@ -5,21 +5,21 @@ import type { PokemonDetail } from './types';
 document.addEventListener("DOMContentLoaded", (event: Event) => {
   const favorites = new Set<number>( JSON.parse(localStorage.getItem('poke-favorites') || '[]') ); // Storage
 
-  const grid = document.querySelector('#grid')! as HTMLElement;
-  const loading = document.querySelector('#loading')! as HTMLElement;
-  const modal = document.querySelector('#modal')! as HTMLElement;
-  const modalBody = document.querySelector('#modal-body')! as HTMLElement;
-  const modalFav = document.querySelector('#modal-fav')! as HTMLButtonElement;
-  const searchInput = document.querySelector('#search')! as HTMLInputElement;
-  const btnRandom = document.querySelector('#btn-random')! as HTMLElement;
-  const btnFavorites = document.querySelector('#btn-favorites')! as HTMLElement;
-  const navDex = document.querySelector('#nav-dex')! as HTMLButtonElement;
-  const navQuiz = document.querySelector('#nav-quiz')! as HTMLButtonElement;
-  const mainView = document.querySelector('main')! as HTMLElement;
-  const quizView = document.querySelector('#quiz-view')! as HTMLElement;
-  const typeSelect = document.querySelector('#select-type')! as HTMLSelectElement;
-  const regionSelect = document.querySelector('#select-region')! as HTMLSelectElement;
-  const headerControls = document.querySelector('.header-controls')! as HTMLElement;
+  const grid = document.querySelector<HTMLDivElement>('#grid')! as HTMLElement;
+  const loading = document.querySelector<HTMLDivElement>('#loading')! as HTMLElement;
+  const modal = document.querySelector<HTMLDivElement>('#modal')! as HTMLElement;
+  const modalBody = document.querySelector<HTMLDivElement>('#modal-body')! as HTMLElement;
+  const modalFav = document.querySelector<HTMLButtonElement>('#modal-fav')! as HTMLButtonElement;
+  const searchInput = document.querySelector<HTMLDivElement>('#search')! as HTMLInputElement;
+  const btnRandom = document.querySelector<HTMLDivElement>('#btn-random')! as HTMLElement;
+  const btnFavorites = document.querySelector<HTMLDivElement>('#btn-favorites')! as HTMLElement;
+  const navDex = document.querySelector<HTMLButtonElement>('#nav-dex')! as HTMLButtonElement;
+  const navQuiz = document.querySelector<HTMLButtonElement>('#nav-quiz')! as HTMLButtonElement;
+  const mainView = document.querySelector<HTMLElement>('main')! as HTMLElement;
+  const quizView = document.querySelector<HTMLDivElement>('#quiz-view')! as HTMLElement;
+  const typeSelect = document.querySelector<HTMLSelectElement>('#select-type')! as HTMLSelectElement;
+  const regionSelect = document.querySelector<HTMLSelectElement>('#select-region')! as HTMLSelectElement;
+  const headerControls = document.querySelector<HTMLDivElement>('.header-controls')! as HTMLElement;
 
   let masterList: { name: string; url: string; species: { name: string }; gender: 'male' | 'female' | 'both' | 'genderless' }[] = [];
   let activeType = 'all';
@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
   let audioPlaying: boolean = false;
   let audio: HTMLAudioElement | null;
 
+  const getGenderIcons = (gender: string): string => gender === 'both' ? '<span class="modal-gender-icon male">♂</span><span class="modal-gender-icon female">♀</span>' : gender === 'male' ? '<span class="modal-gender-icon male">♂</span>' : gender === 'female' ? '<span class="modal-gender-icon female">♀</span>' : '';
+
   function createPokemonCard( pokemon: { name: string; url: string; species: { name: string }; gender: 'male' | 'female' | 'both' | 'genderless' }, index: number ): HTMLElement {
     const id = index + 1;
     const card = document.createElement('div');
@@ -38,30 +40,25 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
     card.dataset.url = pokemon.url;
 
     const sprite = `${sprites}/${id}.png`;
-
-    const genderIcon = pokemon.gender === 'both'
-      ? ' <span class="card-gender-icon male">♂</span><span class="card-gender-icon female">♀</span>'
-      : pokemon.gender === 'male' ? ' <span class="card-gender-icon male">♂</span>'
-      : pokemon.gender === 'female' ? ' <span class="card-gender-icon female">♀</span>'
-      : '';
-
-      console.log(pokemon.species.name);
+    const genderIcon = getGenderIcons(pokemon.gender);
+    
+    console.log(pokemon.species.name);
 
     card.innerHTML = `
-      <img src="${sprite}" alt="${pokemon.species.name}" loading="lazy" />
+      <img src="${sprite}" alt="${pokemon.species.name}" loading="lazy" /> 
       <p class="card-num">#${String(id).padStart(3, '0')}</p>
       <p class="card-name">${pokemon.species.name} ${genderIcon}</p>
       <p class="card-region">${getRegion(id)}</p>
-    `;
+    `; // Browser wont load all images off the bat. Will load images with scroll to reduce calls.
 
     return card;
   }
 
   function renderModal(p: PokemonDetail, gender: 'male' | 'female' | 'both' | 'genderless'): string {
     const sprite = p.sprites.front_default;
-
     const types = p.types.map(t => `<span class="type-badge type-${t.type.name}">${t.type.name}</span>`).join('');
-
+    const genderIcon = getGenderIcons(gender);
+    const abilities = p.abilities.map(a => `<span class="ability-badge">${a.ability.name}</span>`).join('');
     const stats = p.stats
       .map(s => `
         <div class="stat-row">
@@ -74,20 +71,10 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
       `)
       .join('');
 
-    const genderIcons = gender === 'both'
-      ? ' <span class="modal-gender-icon male">♂</span><span class="modal-gender-icon female">♀</span>'
-      : gender === 'male' ? ' <span class="modal-gender-icon male">♂</span>'
-      : gender === 'female' ? ' <span class="modal-gender-icon female">♀</span>'
-      : '';
-
-    const abilities = p.abilities
-      .map(a => `<span class="ability-badge">${a.ability.name}</span>`)
-      .join('');
-
     return `
       <div class="modal-header-row">
         <div>
-          <h2>#${String(p.id).padStart(3, '0')} ${p.species.name.replace(/-[mf]$/, '')} ${genderIcons}</h2>
+          <h2>#${String(p.id).padStart(3, '0')} ${p.species.name.replace(/-[mf]$/, '')} ${genderIcon}</h2>
           <p class="modal-region">${getRegion(p.id)}</p>
           <div class="types">${types}</div>
         </div>
@@ -143,9 +130,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
     });
   }
 
-  function buildDropdowns() {
-    // Should import Types & Regions from API and minimize hard coded values.
-
+  function buildDropdowns() { // Should import Types & Regions from API and minimize hard coded values.
     types.forEach(type => {
       const opt = document.createElement('option');
       opt.value = type;
@@ -412,7 +397,7 @@ document.addEventListener("DOMContentLoaded", (event: Event) => {
     }
   }
 
-  console.log("DOM fully loaded", event);
+  console.log("DOM fully loaded", event); // Console Log DOM
 
   init(); // Initiate App
 });
