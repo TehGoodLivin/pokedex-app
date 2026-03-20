@@ -13,13 +13,6 @@ Built with vanilla TypeScript and Vite — no frameworks.
 - "Who's That Pokemon?" silhouette quiz with score/streak tracking and region filtering
 - Pokemon-styled UI with custom fonts and Pokedex-inspired design
 
-## Tech Stack
-- **TypeScript** — strict typing with interfaces for all API data
-- **Vite** — dev server and build tooling
-- **PokeAPI** — all Pokemon data (`https://pokeapi.co/api/v2`)
-- **GitHub Sprites** — Pokemon sprite images
-- **localStorage** — favorites and quiz score persistence
-
 ## Getting Started
 ### Prerequisites
 - Node.js (v18+)
